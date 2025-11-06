@@ -1,0 +1,81 @@
+:root{
+  --navy:#1F3A8A; --cobalt:#1E40AF; --steel:#E2E8F0; --ink:#0F172A; --bg:#F8FAFC; --white:#fff;
+}
+*{box-sizing:border-box} html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--navy);text-decoration:none} a:hover{color:var(--cobalt)}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--white);border-bottom:1px solid var(--steel);position:sticky;top:0;z-index:50}
+.logo img{height:36px}
+.nav-links a{margin:0 12px}
+.nav-links .btn{margin-left:12px}
+.btn{display:inline-block;padding:10px 14px;border-radius:8px;border:1px solid var(--navy)}
+.btn-primary{background:var(--navy);color:var(--white);border-color:var(--navy)}
+.btn-primary:hover{background:var(--cobalt)}
+.btn-secondary{background:var(--white);color:var(--navy)}
+.hero{background:linear-gradient(135deg,#0b1735,#132a6b);color:var(--white);padding:80px 0}
+.hero .lead{max-width:720px;margin-top:12px}
+.hero-ctas{margin-top:20px}
+.trust-cues{display:flex;gap:16px;list-style:none;padding:0;margin:24px 0 0}
+.section{padding:64px 0}
+.section.alt{background:var(--white)}
+.grid{display:grid;gap:24px}
+.grid.cards{grid-template-columns:repeat(4,1fr)}
+.grid.two{grid-template-columns:1.2fr .8fr}
+.card{background:var(--white);border:1px solid var(--steel);border-radius:12px;padding:20px}
+.inventory-grid{grid-template-columns:repeat(3,1fr)}
+.inv-card{background:var(--white);border:1px solid var(--steel);border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr 1.4fr}
+.inv-thumb{min-height:160px;background-size:cover;background-position:center}
+.inv-body{padding:16px}
+.specs{margin:8px 0 16px;padding:0 0 0 18px}
+.checklist ul{padding-left:18px}
+.trust-list{padding-left:18px}
+.cta-band{padding:48px 0;background:var(--navy);color:var(--white);text-align:center}
+.footer{background:var(--white);border-top:1px solid var(--steel);padding:24px 0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;align-items:start}
+.logo-mark{height:28px}
+.filters{display:flex;gap:12px;margin:12px 0 20px}
+select, input[type="text"], input[type="email"], input[type="tel"], textarea{width:100%;padding:10px;border:1px solid var(--steel);border-radius:8px}
+.form-grid{grid-template-columns:repeat(2,1fr)}
+label{display:block;font-weight:600;margin-bottom:12px}
+@media (max-width:1024px){
+  .grid.cards{grid-template-columns:repeat(2,1fr)}
+  .inventory-grid{grid-template-columns:repeat(2,1fr)}
+  .inv-card{grid-template-columns:1fr}
+  .grid.two{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .grid.cards{grid-template-columns:1fr}
+  .inventory-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .trust-cues{flex-direction:column}
+}
+// Simple inventory filters (client-side demo)
+(function(){
+  const grid = document.getElementById('inventory-grid');
+  if(!grid) return;
+
+  const size = document.getElementById('filter-size');
+  const cond = document.getElementById('filter-condition');
+  const feat = document.getElementById('filter-feature');
+  const reset = document.getElementById('reset-filters');
+
+  function apply(){
+    const s = size.value || '';
+    const c = cond.value || '';
+    const f = feat.value || '';
+    grid.querySelectorAll('.inv-card').forEach(card=>{
+      const match =
+        (!s || card.dataset.size.includes(s.replace("'",''))) &&
+        (!c || card.dataset.condition === c) &&
+        (!f || (card.dataset.feature && card.dataset.feature.includes(f)));
+      card.style.display = match ? '' : 'none';
+    });
+  }
+
+  [size,cond,feat].forEach(el=> el && el.addEventListener('change', apply));
+  reset && reset.addEventListener('click', ()=>{
+    [size,cond,feat].forEach(el=> el.value = '');
+    apply();
+  });
+})();
